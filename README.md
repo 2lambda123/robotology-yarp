@@ -15,8 +15,11 @@ YARP
 [![Latest release](https://img.shields.io/github/release/robotology/yarp.svg)](https://github.com/robotology/yarp/releases)
 [![Release date](https://img.shields.io/github/release-date/robotology/yarp.svg)](https://github.com/robotology/yarp/releases)
 
-YARP is a library and toolkit for communication and device interfaces,
-used on everything from humanoids to embedded devices.
+YARP is a library and toolkit for communication and device interfaces, used on everything from humanoids to embedded devices.
+
+## Setting up and Running GitHub Actions Workflow
+
+To set up the GitHub Actions workflow:
 
 
 Documentation
@@ -32,11 +35,40 @@ See full instructions at http://www.yarp.it/install.html
 
 * On Linux:
 
-```bash
-sudo apt-get install cmake libace-dev
-git clone https://github.com/robotology/yarp
-cd yarp && mkdir build && cd build && cmake .. && make
-sudo make install  # Optional
+```yaml
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - $default-branch
+    branches:
+      - master
+  pull_request:
+    branches:
+      - $default-branch
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
 ```
 
 * On Windows:
